@@ -21,7 +21,8 @@ contract DeployReactive is Script {
     }
 }
 
-/// Step 2 — destination chain (Sepolia). Deploys the vault bound to the reactive contract, plus the
+/// Step 2 — each destination chain (Sepolia, Base Sepolia, ...). Set CALLBACK_PROXY to that chain's proxy
+/// (default: Sepolia; Base Sepolia = 0x476F44b11F5C942c58f4c8E3d0300E5710743585). Deploys the vault bound to the reactive contract, plus the
 /// demo token + marketplace, and sets owner rules.
 ///   REACTIVE=0x.. MAIN_WALLET=0x.. forge script script/Deploy.s.sol:DeployDestination \
 ///     --rpc-url $SEPOLIA_RPC --private-key $PRIVATE_KEY --broadcast
@@ -47,7 +48,8 @@ contract DeployDestination is Script {
     }
 }
 
-/// Step 3 — Reactive Lasna. Subscribes the reactive contract to the token and marketplace routes.
+/// Step 3 — Reactive Lasna, once per origin chain. Subscribes the reactive contract to the token and
+/// marketplace routes of ORIGIN_CHAIN_ID (11155111 Sepolia, 84532 Base Sepolia).
 ///   REACTIVE=.. ORIGIN_CHAIN_ID=11155111 TOKEN=.. MARKET=.. VAULT=.. forge script \
 ///     script/Deploy.s.sol:ConfigureRoutes --rpc-url $LASNA_RPC --private-key $PRIVATE_KEY --broadcast
 contract ConfigureRoutes is Script {

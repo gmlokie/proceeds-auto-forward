@@ -1,6 +1,6 @@
 # STATUS — Proceeds Auto-Forward (Reactive Omni Buildathon, "Set It and Forget It")
 
-Updated: 2026-11-12 ~15:20 WIB. Deadline: 2026-12-05 20:00 UTC (2026-12-06 03:00 WIB).
+Updated: 2026-11-12 ~15:30 WIB (Base Sepolia extension added). Deadline: 2026-12-05 20:00 UTC (2026-12-06 03:00 WIB).
 
 ## Done
 - Foundry project, Solidity 0.8.29, reactive-lib-omni v0.1.0 (Omni: no RVM, plain deploy on Lasna).
@@ -11,7 +11,24 @@ Updated: 2026-11-12 ~15:20 WIB. Deadline: 2026-12-05 20:00 UTC (2026-12-06 03:00
   CallbackFailure (out of gas at a 500k callback gas limit) and was fixed by raising the limit to 1M.
 - Sourcify verification: all 4 contracts `match` (links in README). Mocks verified from OZ master efaa6f7 (what they were deployed with).
 - Demo video demo/demo.mp4 (2:50, 1080p, captions, silent audio track) + 2 stills in demo/; rebuild via demo/build/{fetch.py,render.py,assemble.sh}. Explorer screenshots not used: headless Chromium in the sandbox could not render pages, so loop cards are rendered from RPC receipts.
-- README with mermaid diagrams, setup, addresses, tx table. Local git repo committed. Remote origin github.com/gmlokie/proceeds-auto-forward (user pushes); nothing posted.
+- README with mermaid diagrams, setup, addresses, tx table. Local git repo committed. Remote origin github.com/gmlokie/proceeds-auto-forward (pushed); nothing posted.
+
+## Base Sepolia extension (2026-11-12)
+- Same ProceedsReactive (Lasna 0x445C…1BA8) now also serves Base Sepolia 84532; no reactive redeploy or code change
+  (routes were already keyed by chainId). Added watchToken/watchMarketplace for 84532.
+- Base Sepolia: ProceedsVault 0x1409483E8c6C620a87494059941D5401f6c3eb10 (proxy 0x476F…5585), MockMarketplace
+  0x122B2884708F232A199f89e2E64A6DB4795A26Ec, MockUSD 0x445C336410F0A49e45893e10c25E39B804F81BA8 (same address as the
+  Lasna reactive by nonce coincidence). All Sourcify verified (vault + market exact_match, MockUSD match).
+- Bridge 0.0012 ETH via official L1StandardBridge 0xfd0B…3120 depositETH: 0x5c0853d2…4146 (arrived ~5 min).
+- 3 Base loops, all as intended: base1 direct 24 mUSD fwd; base2 token sale 39 mUSD fwd + dup skip; base3 native
+  sale 0.0000474929 ETH fwd. Hashes in runs/loops.tsv (now has origin_chain column).
+- Latency (runs/latency.py, block timestamps): Sepolia 12 s every loop (callback next block); Base Sepolia 1–2 s;
+  origin→Lasna 0 s (±1 s resolution).
+- Tests 39/39 (new test/MultiChain.t.sol 6, test/Admin.t.sol 12); core contracts 100% line coverage.
+- Balances after: Sepolia 0.00196 ETH, Base Sepolia 0.00117 ETH, Lasna burner 0.2997 lREACT, reactive contract
+  0.0667 lREACT (~5 more reactive txs before a top-up is needed; top up from burner), Base vault 0.0000091 ETH.
+- README rewritten for judges (story, multichain mermaid, security model, latency, costs, limitations/future).
+- Demo video not regenerated (covers Sepolia only; README says so).
 
 ## Addresses
 | Contract | Chain | Address |
