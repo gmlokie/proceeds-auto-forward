@@ -246,12 +246,16 @@ Takeaways:
 
 ## Demo video
 
-[`demo/demo.mp4`](demo/demo.mp4) (2:50, 1080p, captions, no voiceover) covers the Sepolia deployment:
-idea, architecture, code highlights, `forge test`, loops 2–4 step by step with tx hashes, blocks and decoded
-events, results of all five Sepolia loops, and verification. It predates the Base Sepolia extension, which is
-documented here. Stills: [`demo/screenshot-architecture.png`](demo/screenshot-architecture.png),
-[`demo/screenshot-loop3-dedupe.png`](demo/screenshot-loop3-dedupe.png). Rebuild with
-`demo/build/fetch.py`, `demo/build/render.py`, `demo/build/assemble.sh`.
+[`demo/demo.mp4`](demo/demo.mp4) (2:49, 1080p, **narrated in English with an AI voice**, on-screen captions)
+walks through the idea, architecture, code highlights (subscribe → `react()` → `onProceeds()`), `forge test`
+(39/39), Sepolia loops 2–4 step by step with tx hashes, blocks and decoded events, results of all five
+Sepolia loops (incl. the loop-1 out-of-gas fix), Sourcify verification, and the Base Sepolia second chain
+(3 loops, 1–2 s vs 12 s on Sepolia). The narration is AI text-to-speech (Microsoft neural voice
+`en-US-AndrewNeural` via `edge-tts`); the script with timestamps is in [`demo/voiceover.txt`](demo/voiceover.txt).
+The quiet background pad is synthesized from scratch (`demo/build/music.py`, no samples or third-party music).
+Stills: [`demo/screenshot-architecture.png`](demo/screenshot-architecture.png),
+[`demo/screenshot-loop3-dedupe.png`](demo/screenshot-loop3-dedupe.png). Rebuild with `demo/build/fetch.py`,
+`build_vo.py`, `render.py`, `assemble.sh`, `build_vo.py --mix`, `music.py <seconds>`, `mix.sh`.
 
 ## Tests
 

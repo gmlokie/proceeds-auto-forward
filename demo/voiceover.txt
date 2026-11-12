@@ -1,0 +1,63 @@
+Proceeds Auto-Forward — demo narration (AI voice: Microsoft Edge neural TTS en-US-AndrewNeural, rate +10%, via edge-tts)
+Background: quiet ambient pad bed synthesized in demo/build/music.py (no samples), side-chain ducked ~24 dB under the voice.
+Rebuild: demo/build/build_vo.py -> render.py -> assemble.sh -> build_vo.py --mix -> music.py <sec> -> mix.sh
+
+[0:00.00] title
+Proceeds Auto-Forward. Sell something, and the money moves from your hot wallet to your cold wallet by itself. No bot. No server.
+
+[0:08.43] problem
+Picture an NFT flipper. Sale proceeds pile up in a hot burner wallet. Sweeping by hand gets forgotten, and a keeper bot needs babysitting. Our fix is event-driven, and fully on-chain.
+
+[0:20.19] architecture
+Here is the flow. A token transfer or a marketplace sale pays the vault on Sepolia. Reactive Network sees the log, and our ProceedsReactive contract on Lasna requests a callback. The vault applies the owner's rules, and forwards the money to the main wallet.
+
+[0:35.58] code_subscribe
+Step one: subscribe. Each route is a Reactive subscription to Transfer or Sale events, whose recipient, topic two, is the vault.
+
+[0:44.56] code_react
+Step two: react. It decodes the token and amount, checks that the vault is registered, and requests a callback to the vault.
+
+[0:52.75] code_vault
+Step three: on Proceeds. Only the callback proxy, with our reactive contract's ID, can call it. It de-dupes, then checks pause, allowlist, minimum, keep, and gas buffer. A rule miss is an event, never a revert.
+
+[1:07.42] tests
+Forge test runs the whole loop locally, with mocks. Thirty-nine out of thirty-nine pass, including a fuzz test: a forward never exceeds the reported amount, or the vault's balance.
+
+[1:18.68] loop2_s1
+Now live on testnet. Loop two: twenty-five mock USD is paid straight to the vault.
+
+[1:24.73] loop2_s2
+The same second on Lasna, the subscription matches, and a callback is requested.
+
+[1:30.04] loop2_s3
+One block later, the vault forwards twenty-four, and keeps one. About twelve seconds, end to end.
+
+[1:36.74] loop3_s1
+Loop three: a forty-dollar marketplace sale emits two matching logs, a Transfer and a Sale.
+
+[1:43.51] loop3_s2
+So Lasna requests two callbacks for the same payment.
+
+[1:48.51] loop3_s3
+The vault forwards thirty-nine exactly once, and skips the duplicate. No double spend.
+
+[1:54.25] loop4_s1
+Loop four: a sale paid in native ETH.
+
+[1:59.25] loop4_s2
+The Sale route matches, and requests a callback with the native amount.
+
+[2:04.25] loop4_s3
+The vault forwards the ETH, but never touches its gas buffer, which pays the callback fee.
+
+[2:10.37] results
+Results. Loop one ran out of gas at a five hundred thousand callback limit. One owner call raised it to one million, and every loop after that worked. Loop five, a dust payment, was skipped as below minimum.
+
+[2:23.07] verified
+All four contracts are source-verified on Sourcify.
+
+[2:29.07] base
+Then a second chain. The same reactive contract also serves a vault on Base Sepolia, with no redeploy. Three more loops worked, with callbacks in one to two seconds, versus twelve on Sepolia.
+
+[2:41.12] closing
+Set it, and forget it. Point your payout address at a vault, and Reactive Network does the rest.

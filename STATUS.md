@@ -28,7 +28,7 @@ Updated: 2026-11-12 ~15:30 WIB (Base Sepolia extension added). Deadline: 2026-12
 - Balances after: Sepolia 0.00196 ETH, Base Sepolia 0.00117 ETH, Lasna burner 0.2997 lREACT, reactive contract
   0.0667 lREACT (~5 more reactive txs before a top-up is needed; top up from burner), Base vault 0.0000091 ETH.
 - README rewritten for judges (story, multichain mermaid, security model, latency, costs, limitations/future).
-- Demo video not regenerated (covers Sepolia only; README says so).
+- Demo video regenerated 2026-11-12: AI English narration (edge-tts AndrewNeural), synthesized ambient bed ducked ~24 dB, tests slide 39/39, new Base Sepolia slide; 2:49, -16 LUFS. Script: demo/voiceover.txt.
 
 ## Addresses
 | Contract | Chain | Address |

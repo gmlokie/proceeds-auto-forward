@@ -1,27 +1,27 @@
 [
  [
   "/workspace/work/reactive/demo/build/frames/00_title.png",
-  7
+  8.43
  ],
  [
   "/workspace/work/reactive/demo/build/frames/01_problem.png",
-  9
+  11.76
  ],
  [
   "/workspace/work/reactive/demo/build/frames/02_architecture.png",
-  15
+  15.39
  ],
  [
   "/workspace/work/reactive/demo/build/frames/03_code_subscribe.png",
-  12
+  8.98
  ],
  [
   "/workspace/work/reactive/demo/build/frames/04_code_react.png",
-  14
+  8.19
  ],
  [
   "/workspace/work/reactive/demo/build/frames/05_code_vault.png",
-  14
+  14.67
  ],
  [
   "/workspace/work/reactive/demo/build/frames/06_test_a.png",
@@ -53,54 +53,58 @@
  ],
  [
   "/workspace/work/reactive/demo/build/frames/13_test_6.png",
-  6.0
+  4.06
  ],
  [
   "/workspace/work/reactive/demo/build/frames/14_loop2-direct_s1.png",
-  6.0
+  6.05
  ],
  [
   "/workspace/work/reactive/demo/build/frames/15_loop2-direct_s2.png",
-  6.0
+  5.31
  ],
  [
   "/workspace/work/reactive/demo/build/frames/16_loop2-direct_s3.png",
-  8.0
+  6.7
  ],
  [
   "/workspace/work/reactive/demo/build/frames/17_loop3-tokenSale_s1.png",
-  6.0
+  6.77
  ],
  [
   "/workspace/work/reactive/demo/build/frames/18_loop3-tokenSale_s2.png",
-  6.0
+  5.0
  ],
  [
   "/workspace/work/reactive/demo/build/frames/19_loop3-tokenSale_s3.png",
-  8.0
+  5.74
  ],
  [
   "/workspace/work/reactive/demo/build/frames/20_loop4-nativeSale_s1.png",
-  6.0
+  5.0
  ],
  [
   "/workspace/work/reactive/demo/build/frames/21_loop4-nativeSale_s2.png",
-  6.0
+  5.0
  ],
  [
   "/workspace/work/reactive/demo/build/frames/22_loop4-nativeSale_s3.png",
-  8.0
+  6.12
  ],
  [
   "/workspace/work/reactive/demo/build/frames/23_results.png",
-  11
+  12.7
  ],
  [
   "/workspace/work/reactive/demo/build/frames/24_verified.png",
-  8
+  6.0
  ],
  [
-  "/workspace/work/reactive/demo/build/frames/25_closing.png",
-  7
+  "/workspace/work/reactive/demo/build/frames/25_base.png",
+  12.05
+ ],
+ [
+  "/workspace/work/reactive/demo/build/frames/26_closing.png",
+  7.5
  ]
 ]

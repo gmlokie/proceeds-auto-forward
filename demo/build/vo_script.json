@@ -1,0 +1,149 @@
+[
+ [
+  "title",
+  [
+   "title"
+  ],
+  "Proceeds Auto-Forward. Sell something, and the money moves from your hot wallet to your cold wallet by itself. No bot. No server."
+ ],
+ [
+  "problem",
+  [
+   "problem"
+  ],
+  "Picture an NFT flipper. Sale proceeds pile up in a hot burner wallet. Sweeping by hand gets forgotten, and a keeper bot needs babysitting. Our fix is event-driven, and fully on-chain."
+ ],
+ [
+  "architecture",
+  [
+   "architecture"
+  ],
+  "Here is the flow. A token transfer or a marketplace sale pays the vault on Sepolia. Reactive Network sees the log, and our ProceedsReactive contract on Lasna requests a callback. The vault applies the owner's rules, and forwards the money to the main wallet."
+ ],
+ [
+  "code_subscribe",
+  [
+   "code_subscribe"
+  ],
+  "Step one: subscribe. Each route is a Reactive subscription to Transfer or Sale events, whose recipient, topic two, is the vault."
+ ],
+ [
+  "code_react",
+  [
+   "code_react"
+  ],
+  "Step two: react. It decodes the token and amount, checks that the vault is registered, and requests a callback to the vault."
+ ],
+ [
+  "code_vault",
+  [
+   "code_vault"
+  ],
+  "Step three: on Proceeds. Only the callback proxy, with our reactive contract's ID, can call it. It de-dupes, then checks pause, allowlist, minimum, keep, and gas buffer. A rule miss is an event, never a revert."
+ ],
+ [
+  "tests",
+  [
+   "test_a",
+   "test_0",
+   "test_1",
+   "test_2",
+   "test_3",
+   "test_4",
+   "test_5",
+   "test_6"
+  ],
+  "Forge test runs the whole loop locally, with mocks. Thirty-nine out of thirty-nine pass, including a fuzz test: a forward never exceeds the reported amount, or the vault's balance."
+ ],
+ [
+  "loop2_s1",
+  [
+   "loop2-direct_s1"
+  ],
+  "Now live on testnet. Loop two: twenty-five mock USD is paid straight to the vault."
+ ],
+ [
+  "loop2_s2",
+  [
+   "loop2-direct_s2"
+  ],
+  "The same second on Lasna, the subscription matches, and a callback is requested."
+ ],
+ [
+  "loop2_s3",
+  [
+   "loop2-direct_s3"
+  ],
+  "One block later, the vault forwards twenty-four, and keeps one. About twelve seconds, end to end."
+ ],
+ [
+  "loop3_s1",
+  [
+   "loop3-tokenSale_s1"
+  ],
+  "Loop three: a forty-dollar marketplace sale emits two matching logs, a Transfer and a Sale."
+ ],
+ [
+  "loop3_s2",
+  [
+   "loop3-tokenSale_s2"
+  ],
+  "So Lasna requests two callbacks for the same payment."
+ ],
+ [
+  "loop3_s3",
+  [
+   "loop3-tokenSale_s3"
+  ],
+  "The vault forwards thirty-nine exactly once, and skips the duplicate. No double spend."
+ ],
+ [
+  "loop4_s1",
+  [
+   "loop4-nativeSale_s1"
+  ],
+  "Loop four: a sale paid in native ETH."
+ ],
+ [
+  "loop4_s2",
+  [
+   "loop4-nativeSale_s2"
+  ],
+  "The Sale route matches, and requests a callback with the native amount."
+ ],
+ [
+  "loop4_s3",
+  [
+   "loop4-nativeSale_s3"
+  ],
+  "The vault forwards the ETH, but never touches its gas buffer, which pays the callback fee."
+ ],
+ [
+  "results",
+  [
+   "results"
+  ],
+  "Results. Loop one ran out of gas at a five hundred thousand callback limit. One owner call raised it to one million, and every loop after that worked. Loop five, a dust payment, was skipped as below minimum."
+ ],
+ [
+  "verified",
+  [
+   "verified"
+  ],
+  "All four contracts are source-verified on Sourcify."
+ ],
+ [
+  "base",
+  [
+   "base"
+  ],
+  "Then a second chain. The same reactive contract also serves a vault on Base Sepolia, with no redeploy. Three more loops worked, with callbacks in one to two seconds, versus twelve on Sepolia."
+ ],
+ [
+  "closing",
+  [
+   "closing"
+  ],
+  "Set it, and forget it. Point your payout address at a vault, and Reactive Network does the rest."
+ ]
+]

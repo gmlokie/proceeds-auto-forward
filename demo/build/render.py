@@ -50,7 +50,10 @@ def wrap_text(d, text, xy, f, fill, maxw, lh):
         d.text((x, y), line, font=f, fill=fill); y += lh
     return y
 
+TIMING = json.load(open(os.path.join(HERE, "timing.json"))) if os.path.exists(os.path.join(HERE, "timing.json")) else {}
+
 def save(im, name, secs):
+    secs = TIMING.get(name, secs)  # narration-fitted durations (build_vo.py)
     p = os.path.join(OUT, f"{len(segments):02d}_{name}.png")
     im.save(p); segments.append((p, secs))
 
@@ -214,32 +217,33 @@ function onProceeds(address reactive_, uint256 originChainId_, address token_,
 """, "Only the callback proxy carrying our reactive contract's id can call it. Dedupe, pause, allowlist, minimum, keep and gas buffer; a rule miss is an event, not a revert.", 14, hl=(2, 13))
 
 # ---------------------------------------------------------------- forge test typewriter
-ft = open(os.path.join(HERE, "forge_test.txt")).read().strip("\n").split("\n")
+ft = open(os.path.join(ROOT, "runs", "forge_test.txt")).read().strip("\n").split("\n")
 ft = [l for l in ft if l.strip() and not l.startswith("No files changed")]
 def term(nlines, cmd_chars, secs, name, caption):
     im, d = base(caption, "Tests")
     rr(d, [60, 100, 1860, 925], (6, 8, 12), LINE)
     for i, c in enumerate([RED, YEL, GRN]):
         d.ellipse([90 + i * 34, 120, 112 + i * 34, 142], fill=c)
-    d.text((220, 116), "forge test — 21 tests, offline, mock system contract + mock callback proxy", font=font(22), fill=DIM)
+    d.text((220, 116), "forge test — 39 tests in 3 suites, offline, mock system contract + mock callback proxy", font=font(22), fill=DIM)
     f = font(22, mono=True); lh = 29; y = 170
     cmd = "$ forge test"[:cmd_chars]
     d.text((90, y), cmd + ("█" if nlines == 0 else ""), font=f, fill=GRN); y += lh + 6
-    for l in ft[:nlines]:
+    WIN = 24  # terminal scrolls: show the last WIN lines
+    for l in ft[max(0, nlines - WIN):nlines]:
         c = FG
         if l.startswith("[PASS]"):
             d.text((90, y), "[PASS]", font=f, fill=GRN); d.text((90 + d.textlength("[PASS]", font=f), y), l[6:], font=f, fill=FG)
         else:
-            if "Suite result: ok" in l or "21 tests passed" in l: c = GRN
+            if "Suite result: ok" in l or "39 tests passed" in l: c = GRN
             d.text((90, y), l, font=f, fill=c)
         y += lh
     save(im, name, secs)
 cap_t = "forge test: every test is a full local loop: real logs are relayed into react(), and every requested callback is delivered to the vault."
 term(0, 12, 1.2, "test_a", cap_t)
-steps = [3, 7, 11, 15, 19, 23, len(ft)]
+steps = [7, 14, 21, 28, 35, 42, len(ft)]
 for i, n in enumerate(steps):
     term(n, 12, 1.0 if i < len(steps) - 1 else 6.0, f"test_{i}", cap_t if i < len(steps) - 1 else
-         "21/21 passing, including a fuzz test that a forward never exceeds the reported amount or the vault's balance.")
+         "39/39 passing in 3 suites (core, multichain, admin), including a fuzz test that a forward never exceeds the reported amount or the vault's balance.")
 
 # ---------------------------------------------------------------- loop cards
 L = json.load(open(os.path.join(HERE, "loops_decoded.json")))
@@ -391,14 +395,42 @@ for n, ch, a in ver:
     y += 170
 save(im, "verified", 8)
 
+# ---------------------------------------------------------------- second chain: Base Sepolia
+im, d = base("The same ProceedsReactive on Lasna also serves a vault on Base Sepolia: no redeploy, just two watch calls. Callbacks land in 1–2 s there vs 12 s on Sepolia.", "Second chain")
+d.text((60, 100), "Second chain · Base Sepolia (84532)", font=font(44, True), fill=FG)
+d.text((60, 160), "Same reactive contract 0x445C…1BA8 on Lasna · new vault 0x1409…eb10 · 3 live loops, all as intended", font=font(26), fill=DIM)
+LAT = [l.rstrip("\n").split("\t") for l in open(os.path.join(ROOT, "runs", "latency.tsv"))][1:]
+brow = {"base1-direct": "direct 25 mUSD → forwarded 24, kept 1",
+        "base2-tokenSale": "sale 40 mUSD → forwarded 39 once, duplicate skipped",
+        "base3-nativeSale": "sale in ETH → forwarded 0.0000475 ETH"}
+y = 220
+for r in LAT:
+    if r[0] not in brow: continue
+    rr(d, [60, y, 1860, y + 84], PANEL, GRN, width=2)
+    d.text((95, y + 24), r[0], font=font(28, True), fill=GRN)
+    d.text((470, y + 24), brow[r[0]], font=font(28), fill=FG)
+    d.text((1560, y + 24), f"{r[7]} s end to end", font=font(28, True), fill=ACC)
+    y += 100
+y += 20
+d.text((60, y), "Origin event → callback on the destination chain (block timestamps)", font=font(30, True), fill=FG); y += 60
+sep = [int(r[7]) for r in LAT if r[1] == "Sepolia"]; bs = [int(r[7]) for r in LAT if r[1] == "Base Sepolia"]
+for lbl, vals, c in [("Ethereum Sepolia · 5 loops", sep, YEL), ("Base Sepolia · 3 loops", bs, GRN)]:
+    d.text((60, y + 10), lbl, font=font(28), fill=c)
+    w = int(1200 * max(vals) / 12)
+    rr(d, [520, y, 520 + w, y + 54], c, r=10)
+    t = f"{min(vals)}–{max(vals)} s" if min(vals) != max(vals) else f"{max(vals)} s"
+    d.text((540 + w, y + 10), t, font=font(30, True), fill=c)
+    y += 80
+save(im, "base", 16)
+
 # ---------------------------------------------------------------- closing
 im, d = base()
 d.text((140, 260), "Set it and forget it.", font=font(84, True), fill=FG)
 d.text((144, 380), "Point your payout address at a vault. Reactive Network does the rest.", font=font(38), fill=ACC)
 ys = 480
-for t in ["• One reactive contract can serve vaults on Sepolia, Base Sepolia and Unichain Sepolia",
+for t in ["• One reactive contract serves vaults on Sepolia and Base Sepolia (live), more chains by config",
           "• Owner rules: allowlist · minimum · keep · gas buffer · pause · sweep · public coverDebt()",
-          "• 21 tests, 5 live loops, every tx linked in the README",
+          "• 39 tests · 8 live loops on Sepolia + Base Sepolia · every tx linked in the README",
           "• github.com/gmlokie/proceeds-auto-forward"]:
     d.text((144, ys), t, font=font(32), fill=FG); ys += 62
 save(im, "closing", 7)
