@@ -1,0 +1,27 @@
+No files changed, compilation skipped
+
+Ran 21 tests for test/ProceedsAutoForward.t.sol:ProceedsAutoForwardTest
+[PASS] testFuzz_QuoteNeverExceedsReportedOrBalance(uint96,uint96,uint64) (runs: 256, μ: 108250, ~: 108454)
+[PASS] test_BelowMinimumIsSkipped() (gas: 500561)
+[PASS] test_CallbackRejectsDirectCaller() (gas: 37854)
+[PASS] test_CallbackRejectsOtherReactiveContract() (gas: 46447)
+[PASS] test_DirectTokenPaymentIsForwardedMinusKeep() (gas: 522327)
+[PASS] test_ForwardCappedByActualBalance() (gas: 169088)
+[PASS] test_MainWalletChangeTakesEffect() (gas: 545597)
+[PASS] test_MarketplaceNativeSaleKeepsGasBuffer() (gas: 717213)
+[PASS] test_MarketplaceTokenSaleForwardedOnceDespiteTwoEvents() (gas: 1077114)
+[PASS] test_NativeForwardNeverDipsIntoGasBuffer() (gas: 682463)
+[PASS] test_NotAllowlistedTokenStays() (gas: 1346060)
+[PASS] test_OnlyOwnerConfiguresReactive() (gas: 39511)
+[PASS] test_OwnerOnlyConfigAndSweep() (gas: 178383)
+[PASS] test_PausedVaultHoldsFunds() (gas: 519132)
+[PASS] test_ReactIgnoresErc721Transfer() (gas: 45247)
+[PASS] test_ReactIgnoresUnregisteredVault() (gas: 52595)
+[PASS] test_ReactOnlySystem() (gas: 32614)
+[PASS] test_ReplayedCallbackIsDeduped() (gas: 205285)
+[PASS] test_SaleTopicMatchesMarketplaceEvent() (gas: 10723)
+[PASS] test_UnwatchStopsRoute() (gas: 146519)
+[PASS] test_WatchSubscribesWithVaultAsTopic2() (gas: 40889)
+Suite result: ok. 21 passed; 0 failed; 0 skipped; finished in 13.12ms (15.16ms CPU time)
+
+Ran 1 test suite in 18.08ms (13.12ms CPU time): 21 tests passed, 0 failed, 0 skipped (21 total tests)

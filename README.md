@@ -105,6 +105,24 @@ Skip reasons: `0 Paused, 1 TokenNotAllowed, 2 BelowMinimum, 3 AlreadyProcessed, 
 
 Vault rules in the demo: mUSD allowed, min 5 mUSD, keep 1 mUSD per forward; ETH allowed, min 0.00001 ETH.
 
+### Source verification (Sourcify)
+
+All four contracts are verified on [Sourcify](https://sourcify.dev), the verifier the Reactive docs use for
+Lasna (`forge verify-contract --verifier sourcify`). Status: `match` (runtime and creation bytecode match).
+
+| Contract | Chain | Sourcify |
+| --- | --- | --- |
+| ProceedsReactive | Lasna 5318007 | [repo.sourcify.dev/5318007/0x445C…1BA8](https://repo.sourcify.dev/5318007/0x445C336410F0A49e45893e10c25E39B804F81BA8) |
+| ProceedsVault | Sepolia 11155111 | [repo.sourcify.dev/11155111/0xc1EE…dFE7](https://repo.sourcify.dev/11155111/0xc1EEA4ddD643462402539726a99F1a7Ebd50dFE7) |
+| MockMarketplace | Sepolia 11155111 | [repo.sourcify.dev/11155111/0x406e…A6c](https://repo.sourcify.dev/11155111/0x406e7E7FA57f9534C9Ce350Afa4f23eF0F5faA6c) |
+| MockUSD | Sepolia 11155111 | [repo.sourcify.dev/11155111/0xd16B…86c7](https://repo.sourcify.dev/11155111/0xd16Be1D20f1FFee777F54BC2F65bD11A710E86c7) |
+
+Note: the deployed `MockUSD` and `MockMarketplace` were compiled against OpenZeppelin `master` at commit
+`efaa6f7` (the repo now pins OZ v5.4.0, which produces slightly different bytecode for those two mocks), so
+they were verified from that commit. `ProceedsReactive` and `ProceedsVault` verify from this repo as is.
+Etherscan verification was not done (needs an API key); Sepolia Etherscan can import from Sourcify.
+
+
 ### Full loops on-chain (event → reactive tx → callback)
 
 | # | Scenario | Origin tx (Sepolia) | Reactive tx (Lasna) | Callback tx (Sepolia) | Result |
@@ -124,6 +142,16 @@ so `onProceeds` ran out of gas after the token transfer and the whole call rever
 proxy logged `CallbackFailure`). The fix was a one-line owner call on Lasna (`setCallbackGasLimit(1_000_000)`),
 and the default in `script/Deploy.s.sol` is now 1M. The 25 mUSD from loop 1 is still in the vault and
 can be pulled with `sweep`.
+
+## Demo video
+
+[`demo/demo.mp4`](demo/demo.mp4) (2:50, 1080p, captions, no voiceover): idea, architecture, code highlights,
+`forge test`, then loops 2–4 step by step (origin event → reactive tx → callback) with tx hashes, blocks and
+decoded events read from the Sepolia and Lasna RPCs, the results of all five loops, and verification.
+Stills: [`demo/screenshot-architecture.png`](demo/screenshot-architecture.png),
+[`demo/screenshot-loop3-dedupe.png`](demo/screenshot-loop3-dedupe.png). The video is rebuilt from data with
+`demo/build/fetch.py` (receipts → `loops_decoded.json`), `demo/build/render.py` (slides) and
+`demo/build/assemble.sh` (ffmpeg).
 
 ## Setup
 

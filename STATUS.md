@@ -1,6 +1,6 @@
 # STATUS — Proceeds Auto-Forward (Reactive Omni Buildathon, "Set It and Forget It")
 
-Updated: 2026-11-12 ~15:10 WIB. Deadline: 2026-12-05 20:00 UTC (2026-12-06 03:00 WIB).
+Updated: 2026-11-12 ~15:20 WIB. Deadline: 2026-12-05 20:00 UTC (2026-12-06 03:00 WIB).
 
 ## Done
 - Foundry project, Solidity 0.8.29, reactive-lib-omni v0.1.0 (Omni: no RVM, plain deploy on Lasna).
@@ -9,7 +9,9 @@ Updated: 2026-11-12 ~15:10 WIB. Deadline: 2026-12-05 20:00 UTC (2026-12-06 03:00
 - Deployed on testnets and ran 5 full loops (event → reactive tx → callback); 4 succeeded as intended
   (2 forwards of mUSD, 1 ETH forward, 1 BelowMinimum skip, plus a dedupe skip), loop 1 hit
   CallbackFailure (out of gas at a 500k callback gas limit) and was fixed by raising the limit to 1M.
-- README with mermaid diagrams, setup, addresses, tx table. Local git repo committed. No GitHub repo created, nothing posted.
+- Sourcify verification: all 4 contracts `match` (links in README). Mocks verified from OZ master efaa6f7 (what they were deployed with).
+- Demo video demo/demo.mp4 (2:50, 1080p, captions, silent audio track) + 2 stills in demo/; rebuild via demo/build/{fetch.py,render.py,assemble.sh}. Explorer screenshots not used: headless Chromium in the sandbox could not render pages, so loop cards are rendered from RPC receipts.
+- README with mermaid diagrams, setup, addresses, tx table. Local git repo committed. Remote origin github.com/gmlokie/proceeds-auto-forward (user pushes); nothing posted.
 
 ## Addresses
 | Contract | Chain | Address |

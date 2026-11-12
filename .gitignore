@@ -5,3 +5,8 @@ broadcast/*/31337/
 *.key
 node_modules/
 .env.sh
+demo/build/frames/
+demo/build/seg/
+demo/build/check/
+demo/build/shots/
+demo/build/list.txt
