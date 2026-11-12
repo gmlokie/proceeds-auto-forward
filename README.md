@@ -246,6 +246,8 @@ Takeaways:
 
 ## Demo video
 
+**Watch on YouTube:** https://youtu.be/xIIDfkPonUU
+
 [`demo/demo.mp4`](demo/demo.mp4) (2:49, 1080p, **narrated in English with an AI voice**, on-screen captions)
 walks through the idea, architecture, code highlights (subscribe → `react()` → `onProceeds()`), `forge test`
 (39/39), Sepolia loops 2–4 step by step with tx hashes, blocks and decoded events, results of all five
